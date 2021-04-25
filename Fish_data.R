@@ -38,8 +38,8 @@ fish_long_data <- fish_long %>%
   fish_long %>% 
     ggplot(aes(x = location, y = species)) +
     geom_jitter(aes(color = location), 
-                shape = 16, size = 3, 
-                alpha = 0.3, width = 0.4) +
+                shape = 19, size = 2, 
+                alpha = 0.2, width = 0.3) +
     geom_errorbar(aes(y = mean, ymax = upper, ymin = lower), 
                   data = fish_long_data, 
                   width = .1, size = .8) +
