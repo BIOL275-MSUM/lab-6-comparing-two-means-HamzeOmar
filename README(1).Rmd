@@ -76,7 +76,7 @@ t.test(formula = species ~ location, data = fish_long)
 
 # ANSWER
 
-The P-value indicates that it's greater than the alpha level of 0.05, in that case we failed to reject the null hypothesis. P-value is 0.5596, this means there's 55%.
+The P-value indicates that it's greater than the alpha level of 0.05, in that case we failed to reject the null hypothesis. P-value is 0.5596.
 
 ```{r fish_long, message=FALSE, warning=FALSE, paged.print=FALSE}
 t.test(formula = species ~ location, data = fish_long)
@@ -152,8 +152,8 @@ temperature_means <-
       n = n(),
       sem = sd / sqrt(n),
       upper = mean + 1.96 * sem,
-      lower = mean - 1.96 * sem
-    )
+      lower = mean - 1.96 * sem)
+
 
  ggplot(data = crab_fans_data, aes(x = type, y = temperature)) +
     geom_jitter(aes(color = type),
