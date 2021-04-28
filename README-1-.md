@@ -154,17 +154,6 @@ t.test(formula = species ~ location, data = fish_long)
     ## mean in group Downstream   mean in group Upstream 
     ##                 16.41667                 14.58333
 
-## Question C
-
-> State the assumptions that you had to make to complete parts (A) and
-> (B). Create a graph to assess whether one of those assumptions was
-> met.
-
-# ANSWER
-
-The distribution is normally distributed and the means of both variables
-show some differences, the true mean difference isn’t equal to zero.
-
 ``` r
 fish_long %>% 
     ggplot(aes(x = location, y = species)) +
@@ -182,4 +171,144 @@ fish_long %>%
     guides(color = "none")
 ```
 
+![](README-1-_files/figure-gfm/fish_long-1.png)<!-- -->
+
+## Question C
+
+> State the assumptions that you had to make to complete parts (A) and
+> (B). Create a graph to assess whether one of those assumptions was
+> met.
+
+# ANSWER
+
+The distribution is not normally distributed and the means of both
+variables show some differences. From the previous calculation, it tells
+us that the true mean difference isn’t equal to zero.
+
+``` r
+fish_long %>% 
+    ggplot(aes(x = species)) +
+    geom_histogram(
+      aes(fill = location), 
+      bins = 20, 
+      alpha = 0.5, 
+      position = "identity"
+    ) +
+    scale_fill_manual(values = c("darkorange","cyan4")) +
+    theme_minimal()
+```
+
 ![](README-1-_files/figure-gfm/unnamed-chunk-4-1.png)<!-- -->
+
+``` r
+crab_fans_data <- read_csv("chap15q27FiddlerCrabFans.csv") %>%
+    rename(type = crabType, temperature = bodyTemperature)
+```
+
+    ## 
+    ## ── Column specification ────────────────────────────────────────────────────────
+    ## cols(
+    ##   crabType = col_character(),
+    ##   bodyTemperature = col_double()
+    ## )
+
+``` r
+  crab_fans_data
+```
+
+    ## # A tibble: 85 x 2
+    ##    type   temperature
+    ##    <chr>        <dbl>
+    ##  1 female         1.9
+    ##  2 female         1.6
+    ##  3 female         1.4
+    ##  4 female         1.1
+    ##  5 female         1.6
+    ##  6 female         1.8
+    ##  7 female         1.9
+    ##  8 female         1.7
+    ##  9 female         1.5
+    ## 10 female         1.8
+    ## # … with 75 more rows
+
+## ANOVA
+
+Fiddler crabs are so called because males have a greatly enlarged
+“major” claw, which is used to attract females and to defend a
+burrow.
+
+Darnell and Munguia (2011) recently suggested that this appendage might
+also act as a heat sink, keeping males cooler while out of the burrow on
+hot days.
+
+To test this, they placed four groups of crabs into separate plastic
+cups and supplied a source of radiant heat (60-watt light bulb) from
+above. The four groups were intact male crabs, male crabs with the major
+claw removed; male crabs with the other (minor) claw removed (control);
+and intact female fiddler crabs.
+
+They measured the body temperature of crabs every 10 minutes for 1.5
+hours. These measurements were used to calculate a rate of heat gain for
+every individual crab in degrees C/log minute. Rates of heat gain for
+all crabs are provided in the accompanying data file.
+
+### Question D
+
+Graph the distribution of body temperatures for each crab type:
+
+``` r
+temperature_means <-
+    crab_fans_data %>%
+    filter(!is.na(temperature)) %>%      # remove missing values
+    group_by(type) %>%
+    summarize(
+      mean = mean(temperature),
+      sd = sd(temperature),
+      n = n(),
+      sem = sd / sqrt(n),
+      upper = mean + 1.96 * sem,
+      lower = mean - 1.96 * sem
+    )
+
+ ggplot(data = crab_fans_data, aes(x = type, y = temperature)) +
+    geom_jitter(aes(color = type),
+                width = 0.1,
+                alpha = 0.7,
+                show.legend = FALSE,
+                na.rm = TRUE) +
+    geom_errorbar(aes(y = mean, ymin = lower, ymax = upper), 
+                  data = temperature_means,
+                  width = .1, position = position_nudge(.3)) +
+    geom_point(aes(y = mean), data = temperature_means,
+               position = position_nudge(.3)) +
+    scale_color_manual(values = c("darkorange","darkorchid","cyan4", "red"))
+```
+
+![](README-1-_files/figure-gfm/unnamed-chunk-6-1.png)<!-- -->
+
+### Question E
+
+Does body temperature varies among crab types? State the null and
+alternative hypothesis, conduct and ANOVA, and interpret the results.
+
+Yes, body temp varies in different scenerios, for example if we look at
+the female crab, they have the highest body temp. In addition if we
+compare intact male, male major, and minor removed. Intact male shows
+higher temp of heat, but if we subset from male major, the temp
+decreases. On the minor male removed the heat temp still as high but
+skuad to the left of the graph
+
+``` r
+ crab_fans_data %>% filter(!is.na(type)) %>% 
+    ggplot(aes(x = temperature)) +
+    geom_histogram(
+      aes(fill = type), 
+      bins = 10, 
+      alpha = 0.5, 
+      position = "identity", na.rm = TRUE
+    ) + scale_fill_manual(values = c("darkorange","cyan4", "darkorchid", "red")) +
+    theme_minimal() +
+    facet_wrap(~type, ncol=1)
+```
+
+![](README-1-_files/figure-gfm/unnamed-chunk-7-1.png)<!-- -->
