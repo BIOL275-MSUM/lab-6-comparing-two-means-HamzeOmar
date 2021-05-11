@@ -135,8 +135,7 @@ t.test(formula = species ~ location, data = fish_long)
 # ANSWER
 
 The P-value indicates that it’s greater than the alpha level of 0.05, in
-that case we failed to reject the null hypothesis. P-value is 0.5596,
-this means there’s 55%.
+that case we failed to reject the null hypothesis. P-value is 0.5596…..
 
 ``` r
 t.test(formula = species ~ location, data = fish_long)
@@ -267,8 +266,8 @@ temperature_means <-
       n = n(),
       sem = sd / sqrt(n),
       upper = mean + 1.96 * sem,
-      lower = mean - 1.96 * sem
-    )
+      lower = mean - 1.96 * sem)
+
 
  ggplot(data = crab_fans_data, aes(x = type, y = temperature)) +
     geom_jitter(aes(color = type),
@@ -312,3 +311,32 @@ skuad to the left of the graph
 ```
 
 ![](README-1-_files/figure-gfm/unnamed-chunk-7-1.png)<!-- -->
+
+``` r
+aov_bill_depth_species <-
+  aov(temperature ~ type, data = crab_fans_data)
+aov_bill_depth_species
+```
+
+    ## Call:
+    ##    aov(formula = temperature ~ type, data = crab_fans_data)
+    ## 
+    ## Terms:
+    ##                     type Residuals
+    ## Sum of Squares  2.641310  3.467619
+    ## Deg. of Freedom        3        80
+    ## 
+    ## Residual standard error: 0.2081952
+    ## Estimated effects may be unbalanced
+    ## 1 observation deleted due to missingness
+
+``` r
+summary(aov_bill_depth_species)
+```
+
+    ##             Df Sum Sq Mean Sq F value Pr(>F)    
+    ## type         3  2.641  0.8804   20.31  7e-10 ***
+    ## Residuals   80  3.468  0.0433                   
+    ## ---
+    ## Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
+    ## 1 observation deleted due to missingness

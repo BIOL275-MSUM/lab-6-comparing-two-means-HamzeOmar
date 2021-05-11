@@ -76,7 +76,7 @@ t.test(formula = species ~ location, data = fish_long)
 
 # ANSWER
 
-The P-value indicates that it's greater than the alpha level of 0.05, in that case we failed to reject the null hypothesis. P-value is 0.5596.
+The P-value indicates that it's greater than the alpha level of 0.05, in that case we failed to reject the null hypothesis. P-value is 0.5596.....
 
 ```{r fish_long, message=FALSE, warning=FALSE, paged.print=FALSE}
 t.test(formula = species ~ location, data = fish_long)
@@ -187,4 +187,10 @@ Intact male shows higher temp of heat, but if we subset from male major, the tem
     ) + scale_fill_manual(values = c("darkorange","cyan4", "darkorchid", "red")) +
     theme_minimal() +
     facet_wrap(~type, ncol=1)
+
+aov_bill_depth_species <-
+  aov(temperature ~ type, data = crab_fans_data)
+aov_bill_depth_species
+
+summary(aov_bill_depth_species)
 ```
